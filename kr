@@ -1,0 +1,165 @@
+from Validation import *
+
+
+class Journey: 
+    def __init__(self, city="",Budget="", date1="",date2="",username=""):
+        try:
+            self.__id=ValidateCity(city)
+            self.__Budget=ValidateBudget(Budget)
+            self.__date1=ValidateDate(date1)
+            self.__date2=ValidateDate(date2)
+            self.__username=ValidateUsername(username)
+        except ValueError as error:
+            print (error)
+    @property
+    def City (self):
+        return self.__city
+    @City.setter
+    def City(self, value):
+        self.__city=ValidateCity(value)
+
+    @property
+    def Budget (self):
+        return self.__budget
+    @Budget.setter
+    def Budget(self, value):
+        self.__budget=ValidateBudget(value)
+
+    @property
+    def Date1 (self):
+        return self.__date1
+    @Date1.setter
+    def Date1(self, value):
+        self.__date1=ValidateDate(value)
+
+    @property
+    def Date2 (self):
+        return self.__date2
+    @Date2.setter
+    def Date2(self, value):
+        self.__date2=ValidateDate(value)
+
+    @property
+    def Username (self):
+        return self.__username
+    @Username.setter
+    def Username(self, value):
+        self.__username=Username(value)
+            
+    
+    def __str__(self):
+        s= ""
+        s+="City:"+str(self.City) + "\n"
+        s+="Budget:"+str(self.Budget) + "\n"
+        s+="Date:"+str(self.Date1) + "\n"
+        s+="Date:"+str(self.Date2) + "\n" 
+        s+="Username:"+self.Username + "\n"
+        return s
+    def read(self, line):
+        s=line.split()
+        try:
+            self.City=s[0]
+            self.Budget=s[1]
+            self.Date1=s[2]
+            self.Date2=s[3]
+            self.Username=s[4]
+        except ValueError as v:
+            print (v)
+            raise TypeError("Unknow object")
+    def input(self):
+        try:
+            self.City=input("Enter City: ")
+            self.Budget=input("Enter Budget: ")
+            self.Date1=input("Enter first date: ")
+            self.Date2=input("Enter second date: ")
+            self.Username=input("Enter username: ")
+        except ValueError as v:
+            print (v)
+            raise TypeError ("Unknow object")
+    def edit(self):
+        try:
+            self.Budget=input(f"Your Budget: {self.Budget}.Enter new Budget ")
+            self.Date1=input(f"Your first date: {self.Date1}.Enter new Date ")
+            self.Date2=input(f"Your second date: {self.Date2}Enter new Date ")
+            self.Username=input(f"Your username: {self.Username}. Enter new username ")
+        except ValueError as v:
+            print (v)
+            raise TypeError ("Unknow object")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import datetime
+def ValidateCity(zt):
+    try:
+        d=string(zt)
+        if d!=' ':
+            raise ValueError ("Uncorrect city")
+    except ValueError as error:
+        raise
+    return d
+
+def ValidateBudget(zt):
+    try:
+        d=float(zt)
+        if d<0:
+            raise ValueError ("Uncorrect budget")
+    except ValueError as error:
+        raise
+    return d
+
+def ValidateDate(zt):
+    try:
+        d=datetime.datetime.strptime(zt, "%d.%m.%Y").date()
+        if d>datetime.datetime.today().date():
+            raise ValueError ("Uncorrect date")
+    except ValueError as error:
+        raise
+    return d
+    
+    
+    
+    
+    
+    
+    
+    
+    from Validation import *
+from Journey import Journey
+
+class Colection:
+    def __init__(self):
+        self.array=[]
+    def readfromfile(self, filename):
+        with open(filename, "r") as F:
+            for line in F:
+                a=Journey()
+                try:
+                    a.read(line)
+                    self.array.append(a)
+                except TypeError as v:
+                    print (v)
+    def output(self):
+        for i in self.array:
+            print (i)
+    
+    
+    
+    
+
+
+
+
+
+
+
