@@ -1,0 +1,327 @@
+from ValidationFunction import *
+
+
+class ADVERTISEMENT: 
+    def __init__(self, id="1",url="https://www.pppppppp.com",date1="12.10.2021",date2="15.10.2021",price="10",photo="https://www.peeppppp.com",transaction="BB-111-UU/12"):
+        try:
+            self.__id=Dec(ValidateID)(id)
+            self.__url=Dec(ValidateURL)(url)
+            self.__date1=Dec(ValidateDate)(date1)
+            self.__date2=Dec(ValidateDate)(date2)
+            self.__price=Dec(ValidatePrice)(price)
+            self.__photo=Dec(ValidateURL)(photo)
+            self.__transaction=Dec(ValidateTransactionNumber)(transaction)
+        except ValueError as error:
+            print (error)
+    @property
+    def ID (self):
+        return self.__id
+    @ID.setter
+    def ID(self, value):
+        self.__id= Dec(ValidateID)(value)
+
+    @property
+    def URL (self):
+        return self.__url
+    @URL.setter
+    def URL(self, value):
+        self.__url=Dec(ValidateURL)(value)
+
+    @property
+    def Date1 (self):
+        return self.__date1
+    @Date1.setter
+    def Date1(self, value):
+        self.__date1=Dec(ValidateDate)(value)
+
+    @property
+    def Date2 (self):
+        return self.__date2
+    @Date2.setter
+    def Date2(self, value):
+        self.__date2=Dec(ValidateDate)(value)
+
+    @property
+    def Price (self):
+        return self.__price
+    @Price.setter
+    def Price(self, value):
+        self.__price=Dec(ValidatePrice)(value)
+
+    @property
+    def Photo (self):
+        return self.__photo
+    @Photo.setter
+    def Photo(self, value):
+        self.__photo=Dec(ValidateURL)(value)
+
+    @property
+    def TransactionNumber (self):
+        return self.__transaction
+    @TransactionNumber.setter
+    def TransactionNumber(self, value):
+        self.__transaction=Dec(ValidateTransactionNumber)(value)
+            
+    
+    def __str__(self):
+        s= ""
+        s+="ID:"+str(self.ID) + "\n"
+        s+="URL:"+str(self.URL) + "\n"
+        s+="Date:"+str(self.Date1) + "\n"
+        s+="Date:"+str(self.Date2) + "\n" 
+        s+="Price:"+str(self.Price) + "\n"
+        s+="Photo:"+str(self.Photo) + "\n" 
+        s+="Transaction number:"+str(self.TransactionNumber) + "\n"
+        return s
+    def __dir__(self):
+        return["ID","URL","Date1", "Date2", "Price","Photo", "TransactionNumber"]
+
+
+
+    def read(self, line):
+        s=line.split()
+        try:
+            self.ID=s[0]
+            self.URL=s[1]
+            self.Date1=s[2]
+            self.Date2=s[3]
+            self.Price=s[4]
+            self.Photo=s[5]
+            self.TransactionNumber=s[6]
+        except ValueError as v:
+            print (v)
+            raise TypeError("Unknow object")
+    def input(self):
+        try:
+            self.ID=input("Enter ID: ")
+            self.URL=input("Enter URl: ")
+            self.Date1=input("Enter first date: ")
+            self.Date2=input("Enter second date: ")
+            self.Price=input("Enter price: ")
+            self.Photo=input("Enter photo: ")
+            self.TransactionNumber=input("Enter transaction: ")
+        except ValueError as v:
+            print (v)
+            raise TypeError ("Unknow object")
+    def edit(self):
+        try:
+            self.URL=input( f"Your URl: {self.URL}.Enter new URL ")
+            self.Date1=input(f"Your first date: {self.Date1}.Enter new Date ")
+            self.Date2=input(f"Your second date: {self.Date2}Enter new Date ")
+            self.Price=input(f"Your price: {self.Price}.Enter new price ")
+            self.Photo=input(f"Your photo: {self.Photo}.Enter new photo ")
+            self.TransactionNumber=input(f"Your transaction: {self.TransactionNumber}. Enter new transaction ")
+        except ValueError as v:
+            print (v)
+            raise TypeError ("Unknow object")
+
+
+
+
+from ValidationFunction import *
+from ADVERTISEMENT import ADVERTISEMENT
+
+class Colection:
+    def __init__(self):
+        self.array=[]
+    def readfromfile(self, filename):
+        with open(filename, "r") as F:
+            for line in F:
+                a=ADVERTISEMENT()
+                try:
+                    a.read(line)
+                    self.array.append(a)
+                except TypeError as v:
+                    print (v)
+    def output(self):
+        for i in self.array:
+            print (i)
+
+    def add(self):
+        a=ADVERTISEMENT()
+        print ("Input new object: ")
+        try:
+            a.input()
+            self.array.append(a)
+        except TypeError as v:
+            print (v)
+    def searchid(self,id):
+        for i in self.array:
+            if i.ID==id:
+                return i
+    def delete(self, id):
+        a=self.searchid(id)
+        if a is not None:
+            self.array.remove(a)
+        else:
+            print("Object with this ID isn't in colection.")
+    def edit(self, id):
+        a=self.searchid(id)
+        if a is not None:
+            a.edit()
+        else:
+            print("Object with this ID isn't in colection.")
+    def checkid(self):
+        while True:
+            try:
+                d=input("Enter id")
+                return ValidateID(d)
+            except ValueError as r: 
+                print (r)
+
+
+    def sort(self):
+        l=dir(self.array[0])
+        while True:
+            print("Enter field, where you want to sort ")
+            for i in l:
+                print (i,end="  ")
+            field=input("\n Enter your choise ")
+            if field not in l:
+                print("Uncorrect field")
+            else:
+                break
+        self.array.sort(key=lambda x:getattr(x,field))
+
+    def search(self,unknow):
+        l=dir(self.array[0])
+        List1=[]
+        for i in self.array:
+            for a in l:
+                if str(getattr(i,a)).upper().startswith(unknow.upper()):
+                    List1.append(i)
+        return List1
+        
+
+
+        
+        
+
+if __name__=="__main__":
+    c=Colection()
+    c.readfromfile("TextFile1.txt")
+    c.output()
+
+    #c.add()
+    #c.output()
+
+    #c.delete(515151)
+    #c.output()
+
+    #c.edit(132131)
+    #c.output()
+
+    #c.sort()
+    #c.output()
+
+    #l=c.search("132")
+    #for i in l:
+    #    print (i)
+
+
+
+import sys
+from Colection import Colection
+def execmenu(nummer, colec):
+    actions={"1":addelement, 
+             "2":deleteelement, 
+             "3":editelement, 
+             "4":sort,
+             "5":search,
+             "6":exit}
+    try:actions[nummer](colec)
+    except KeyError:
+        print ("Incorrect choise")
+def addelement(colection):
+    colection.add()
+    colection.output()
+def deleteelement(colection):
+    id=colection.checkid()
+    colection.delete(id)
+    colection.output()
+def editelement(colection):
+    id=colection.checkid()
+    colection.edit(id)
+    colection.output()
+def sort(colection):
+    colection.sort()
+    colection.output()
+def search(colection):
+    d=input("Enter data for search")
+    l=colection.search(d)
+    print("Finded elements:")
+    for i in l:
+        print (i)
+def exit(colection):
+    sys.exit()
+
+def main():
+    c=Colection()
+    while True:
+        f=input("Enter name of file")
+        try:
+            c.readfromfile(f)
+            break
+        except Exception as a:
+            print(a)
+    c.output()
+    while True:
+        print("1: Add element")
+        print("2: Delete element")
+        print("3: Edit element")
+        print("4: Sort colection")
+        print("5: Search in colection")
+        print("6: Exit")
+        nummer=input("Enter your choise")
+        execmenu(nummer,c)
+main()
+
+
+
+
+
+320213 https://www.arararr.com 12.10.2021 15.10.2021 750 https://www.googlephoto.com YY-111-YY/11
+132131 https://www.adasdad.com 02.11.2020 18.11.2020 451 https://www.googlephoto.com CC-212-VV/21
+515151 https://www.hhahaha.com 18.11.2020 24.11.2020 132 https://www.googlephoto.com BB-111-UU/12
+
+
+
+
+import datetime
+def ValidateID(zt):
+    d=int(zt)
+    if d<0:
+        raise ValueError ("Incorrect id")
+    return d
+
+def ValidateURL (zt):
+    zt=zt.strip()
+    if not zt.startswith("https://www.") or zt.count(".")<2:
+        raise ValueError ("Incorrect format for URL")
+    return zt
+def ValidateDate(zt):
+    d=datetime.datetime.strptime(zt, "%d.%m.%Y").date()
+    if d>datetime.datetime.today().date():
+        raise ValueError ("Incorrect date")
+    return d
+def ValidatePrice(zt):
+    d=float(zt)
+    if d<0:
+        raise ValueError ("Incorrect price")
+    return d
+def ValidateTransactionNumber(zt):
+    zt=zt.strip()
+    if len(zt)!=12 or not zt[0:2].isalpha() or not zt[3:6].isdigit() or not zt[7:9].isalpha() or not zt[10:].isdigit() or zt[2]!= "-" or zt[6] != "-" or zt[9] != "/":
+        raise ValueError ("Incorrect format of transction number")
+    return zt 
+
+
+
+
+def Dec (func):
+    def vrap (*args, **kvrgs):
+        try:
+            return func (*args, **kvrgs)
+        except Exception as ex:
+            print (ex)    
+    return vrap
